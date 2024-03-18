@@ -68,6 +68,9 @@ function checkButton(buttonValue) {
     else if (buttonValue === ".") {
         handleDecimal();
     }
+    else if (buttonValue === "Del"){
+        deletePreviousCharacter()
+    }
 }
 
 function replaceLastOperator(newOperator) {
@@ -134,4 +137,13 @@ function handleDecimal() {
 
 function replaceString(newValue){
     document.querySelector("#results").textContent = `${newValue}`
+}
+
+function deletePreviousCharacter() {
+    const currentText = results.textContent;
+    
+    if (currentText.length > 0) {
+        const newText = currentText.slice(0, -1);
+        replaceString(newText);
+    }
 }
