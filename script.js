@@ -19,7 +19,9 @@ function division( num1, num2 ){
     if (num2 === 0){
         return "You cant divide by 0..."
     }
-    return( num1 / num2 )
+    console.log(( num1 / num2 ))
+    let result = Math.floor( ( num1 / num2 ) *1000 ) / 1000
+    return( result )
 }
 
 function operate( num1, num2){
@@ -44,18 +46,31 @@ buttons.forEach((button)=>{
         checkButton(button.textContent)})
 })
 
-function checkButton( buttonValue ){
-    if ( buttonValue ==="1" || buttonValue ==="2" || buttonValue ==="3" || buttonValue ==="4" || buttonValue ==="5" || 
-        buttonValue ==="6" || buttonValue ==="7" || buttonValue ==="8" || buttonValue ==="9" || buttonValue ==="0" ){
-        
-        concatString( buttonValue );
+function checkButton(buttonValue) {
+    if (buttonValue === "1" || buttonValue === "2" || buttonValue === "3" || buttonValue === "4" || buttonValue === "5" || buttonValue === "6" || buttonValue === "7" || buttonValue === "8" || buttonValue === "9" || buttonValue === "0") {
+        concatString(buttonValue);
+    } else if (buttonValue === "+" || buttonValue === "-" || buttonValue === "*" || buttonValue === "/") {
+        const lastChar = results.textContent.charAt(results.textContent.length - 1);
+        if (lastChar === "+" || lastChar === "-" || lastChar === "*" || lastChar === "/") {
+            // Replace the existing operator with the new one
+            replaceLastOperator(buttonValue);
+        } else if (results.textContent !== "") {
+            // Perform the operation and then append the new operator
+            const newValue = stripString();
+            replaceString(newValue + buttonValue);
+        }
+    } else if (buttonValue === "Clear") {
+        clearString();
+    } else if (buttonValue === "=") {
+        const newValue = stripString();
+        replaceString(newValue);
     }
-    else if (buttonValue ==="+" || buttonValue ==="-" || buttonValue ==="*" || buttonValue ==="/" ){
-        concatString( buttonValue );
-    }
-    else if (buttonValue ==="Clear"){
-        clearString()
-    }
+}
+
+function replaceLastOperator(newOperator) {
+    const equation = results.textContent;
+    const newEquation = equation.substring(0, equation.length - 1) + newOperator;
+    document.querySelector("#results").textContent = newEquation;
 }
 
 const results = document.querySelector("#results")
@@ -66,4 +81,34 @@ function concatString(buttonValue){
 
 function clearString(){
     document.querySelector("#results").textContent = ""
+}
+
+function stripString() {
+    let equation = results.textContent;
+    let operands = equation.split(/\+|\-|\*|\//); // Splitting by operators
+    let operator = equation.match(/\+|\-|\*|\//); // Matching the operator
+
+    if (operator && operands.length === 2) {
+        let num1 = parseFloat(operands[0]);
+        let num2 = parseFloat(operands[1]);
+        
+        switch (operator[0]) {
+            case '+':
+                return addition(num1, num2);
+            case '-':
+                return subtraction(num1, num2);
+            case '*':
+                return multiplication(num1, num2);
+            case '/':
+                return division(num1, num2);
+            default:
+                return "Invalid operation";
+        }
+    } else {
+        return equation
+    }
+}
+
+function replaceString(newValue){
+    document.querySelector("#results").textContent = `${newValue}`
 }
