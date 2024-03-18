@@ -65,6 +65,9 @@ function checkButton(buttonValue) {
         const newValue = stripString();
         replaceString(newValue);
     }
+    else if (buttonValue === ".") {
+        handleDecimal();
+    }
 }
 
 function replaceLastOperator(newOperator) {
@@ -91,7 +94,7 @@ function stripString() {
     if (operator && operands.length === 2) {
         let num1 = parseFloat(operands[0]);
         let num2 = parseFloat(operands[1]);
-        
+
         switch (operator[0]) {
             case '+':
                 return addition(num1, num2);
@@ -105,7 +108,27 @@ function stripString() {
                 return "Invalid operation";
         }
     } else {
-        return equation
+        return equation;
+    }
+}
+
+function isOperator(char) {
+    return char === "+" || char === "-" || char === "*" || char === "/";
+}
+
+function handleDecimal() {
+    const equation = results.textContent;
+    const lastChar = equation.charAt(equation.length - 1);
+
+    // Check if the last character is an operator
+    if (!isOperator(lastChar)) {
+        const operands = equation.split(/[\+\-\*\/]/);
+        const lastOperand = operands[operands.length - 1];
+
+        // Check if the current operand already contains a decimal point
+        if (lastOperand === "" || !lastOperand.includes(".")) {
+            concatString(".");
+        }
     }
 }
 
