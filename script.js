@@ -1,7 +1,3 @@
-const num1 = 1;
-const num2 = 2;
-const operator = "";
-
 
 function addition( num1, num2 ){
     return ( num1+num2 )
@@ -40,6 +36,10 @@ function operate( num1, num2){
 }
 
 const buttons = document.querySelectorAll(".button")
+document.addEventListener("keydown", (event)=>{
+    checkButton(event.key)
+});
+
 
 buttons.forEach((button)=>{
     button.addEventListener("click",()=>{
@@ -147,3 +147,4 @@ function deletePreviousCharacter() {
         replaceString(newText);
     }
 }
+
